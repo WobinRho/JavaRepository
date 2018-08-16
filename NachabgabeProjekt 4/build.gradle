@@ -1,0 +1,13 @@
+plugins {
+	id 'java'
+	id 'application'
+}
+repositories {
+	mavenCentral()
+    jcenter()
+}
+dependencies {
+	compile 'org.apache.pdfbox:pdfbox:2.0.9'
+}
+mainClassName = 'Projekt.Test'
+

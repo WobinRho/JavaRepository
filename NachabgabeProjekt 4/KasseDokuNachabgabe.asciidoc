@@ -1,0 +1,78 @@
+= Nachabgabe Projekt 4
+
+== Einleitung
+
+Das vorgegebene Szenario liegt mit im package Projekt in der Test.java . +
+Im folgenden werde ich kurz auf die Packages eingehen dabei deren Klassen und Arbeitsweise erläutern und danach auf die Obeject Cathlisthenics eingehen. +
+
+
+== Das Package Datum
+
+Dieses Package ist das wohl trivialste. Es besitzt folgende die Klassen Datum,Jahr,MonatTag,Monat und Tag. +
+Die einzig von außen zugreifbare Klasse ist dabei Datum. +
+Ein Objekt dieser Klasse besitzt wiederum ein Objekt der Klasse MonatTag und eines der Klasse Jahr. +
+Ein Objekt der Klasse MonatTag, offensichtlicher Weise dann ein Objekt von Monat und eins von Tag. +
+Das Aufrufen der printDatum Methode der Klasse Datum ruft dann den print von MonatTag und Jahr auf. +
+Die print Methode von MonatTag dann wiederum die von Monat und Tag, dabei wird ein PrintStream welcher am Anfang dem printDatum mitgegeben wurde uebergeben. +
+
+== Das Package Projekt
+
+Ich habe mich entschieden die Test.java hier mit hinein zu legen, da ich dann dort einige Objekte erstellen kann, +
+ welche in den anderen Packeten nicht benötigt werden und ich deren Klassen somit package private(protected) machen konnte. +
+ Der Rahmen, also fuer etwa die WG oder die Staedtereise an sich nennt sich hier Projekt. +
+ Dieses besitzt ein Name Objekt und projektDaten. Die Klasse Name ist lediglich ein Wrap fuer einen String mit einer print Methode, +
+ den ich hier und fuer Person verwende. Außerdem besitzt Projekt eine Methode um ein ein Objekt Event aus der Test an die projektDaten weiterzugeben. +
+ Seine andere Methode ist der erste Teil der Methode zur Berechnung der Abrechung. +
+ Sie sorgt lediglich fuer eine einleitende Ausgabe den Aufruf der Berechnung in projektDaten. +
+ Wenn man nun weiter in die ProjektDaten geht hat man eine Instanzvariable mit den Teilnehmern und eine mit Events. +
+Es gibt dann eine Methode welche die Liste von Events neu initialisiert und eine die die Methode der EventListe aufruft um ein Event hinzuzufuegen. +
+Außerdem gibt es wieder die Haupt BerechnungsMethode die in Projekt aufgerufen wurde. +
+Diese macht einen Aufruf um die Liste der zu zahlenden Beträge anhand der PersonenListe der Teilnehmer zu berechnen, ruft fuer diese dann die berechnung, +
+der Ueberweisungen auf und ruft danach die Methode zum resetten der Events auf. +
+Wie bereits erwähnt wird in der Klasse PersonenListe, in berechneBetragsListe ihre Instanzvariable, welche eine ArrayList aus Personen ist, +
+durchiteriert fuer jede eine Methode der EventListe aufgerufen und dieser der am Ende zurueckgegeben BetragsListe hinzugefuegt. +
+Außerdem enthält sie eine Methode um zu bestimmen ob eine Person enthalten ist und um die Groeße einer anderen Liste abzuziehen, +
+dies wird relevant um zu bestimmen wieviel gezahlt werden muss wenn es Leute gab die an einzelnen Events nicht teilgenommen haben. +
+Außerdem besitzt sie 2 weitere print Methoden die später fuer die Ausgabe genutzt werden, sodass nicht von einem anderen Package auf die Methoden von Person +
+zugegriffen werden muss, eine Methode um eine Person an einer Stelle zu entfernen und eine um sie zu duplizieren, welches ich später fuer die Berechnung in der BetragsListe nutze um diese zu vereinfachen. +
+Die Klasse Person besitzt nur einen Namen und eine print Methode die die Print Methode des Namen aufruft. +
+Zur Berechnung existieren dann noch 2 weitere Klassen in diesem Package, zum einen Indizies welche dazu gedacht ist 2 Indexe die in der BetragsListe genutzt werden zu wrappen +
+und den Umgang mit diesen zu vereinfachen. Die Klasse BetragsListe enthält eine ArrayList mit Geldbeträgen und berechnet dann fuer diese mit den projektTeilnehmern wer wem wieviel zahlen muss. +
+Dazu wird ein Klon der projektTeilnehmer erstellt und fuehrt dann die BerechnungsMethode der Indizes aus, welche dann anhand bestimmter anderer Methoden in BetragsListe und Indizes bestimmt, +
+mit welchen Indizes die BerechnungsMethode der BetragsListe ausgefuehrt wird. Diese entfernt nicht mehr benötigte Teilnehmer und zugehörige Beträge, bzw verändert diese so das weitergermacht werden kann, +
+bis alle abgearbeitet sind. +
+
+== Das Package Event
+
+Dieses Package besitzt eine Klasse EventListe, welche Zahlungsdaten und EventDetails speichert. Sie hat einige Methoden um Aufrufe an ihre Klassenvariablen weiterzuleiten. +
+Die EventDetails bestehen aus einer EventBeschreibung, welche nichts anderes als die Klasse Name des vorherigen packages macht und ein Objekt der Klasse Datum welches hier gespeichert wird. +
+In ihrer print Methode werden dann deren beide Prints aufgerufen. +
+Die Zahlungsdaten speichern dann die nichtTeilgenommen Personen in einer PersonenListe und haben eine Methode um dieser jemanden hinzuzufuegen, sowie eine um deren Groesse, +
+durch einen Aufruf der eben erwähnten Methode in PersonenListe abzuziehen und ein Objekt der Klasse Zahlung und entsprechende Methoden um Aufrufe daran weiterzuleiten. +
+Außerdem wird in **mussBezahlen()** dann wieder mit Aufruf einer Methode der PersonenListe, ob jemand in der Liste der Leute ist die nicht teilgenommen haben und somit nicht zahlen muss. +
+Die Klasse Zahlung speichert dann nurnoch eine Person, welche eben fuer das Event gezahlt hat und einen Geldbetrag den sie gezahlt hat. +
+Hier wird nun mit **hatBezahlt()** geprueft ob eine uebergebene Person das Event gezahlt hat und sonst ein leerer Betrag zurueckgegeben, diese dient der Berechnung der zu erstellenden BetragsListe in PersonenListe. +
+Auch wird hier der von allen Teilnehmern zu zahlende Betrag durch die vorher errechnete Groeße der personen Gruppe nach Abzug der nicht Teilgenommen geteilt durch einen Aufruf nach Geldbetrag. +
+Geldbetrag ist einfach nur die Klasse welche die Zahlen der Ausgaben speichert, mit mehreren dieser rechnet, sie vergleicht und printen kann. +
+
+
+
+
+== Object Cathlisthenics
+
+Es gibt die diversesten Schwierigkeiten die aufgetreten sind, um direkt ein Beispiel fuer eine unschöne aber wohl noch akzetabele Lösung zu nennen: +
+Ich habe die voneinander abgezogenen Groessen der PersonenListen nach Rueckgabe in einen Geldbetrag gespeichert um den zu zahlenden Geldbetrag dadurch zu teilen und diese zu wrappen. +
+Das Hauptproblem lag jedoch an der Berechnung und dem arbeiten mit der Gesamtstruktur. Dinge wie das Datum Package sind relativ einfach zu lösen, da es dort kein Problem darstellt alles zu wrappen und sonstige Regeln einzuhalten. +
+Dazu habe ich diverse Lösungsansätze verwendet und bin jetzt bei meinem dritten gelandet, welchen ich auch noch einmal durch das auslagern der Indizes umgeschrieben habe. +
+Den ersten Ansatz kann man in der ersten Abgabe sehen. Der zweite Ansatz resultierte in einer riesigen BerechnungsMethode in der ich die Betragsliste und Personen +
+in jeweils 2 Listen aufgeteilt, in Schuldner und die die Geld bekommen. Mit diesen habe ich dann die Ueberweisungen ausgerechnet, dies erwies sich aber als viel zu groß und komplex um es auszulagern oder zu teilen. +
+Mein jetziger Ansatz löst das Problem, eben durch die beiden Indizes, welche immer die nächste Person suchen die Geld bekommt/zahlen muss und in einer seperaten Klasse gespeichert sind, erneuert werden etc. +
+Damit ich das einfach so machen kann, musste ich eben fuer PersonenListe eine **klon()** Methode erstellen um die Personen zur Berechnung aus der Liste entfernen zu können. +
+Ansonten ist eben das größte Problem alles von einander abzukapseln und die Daten der anderen Dinge nicht zu nutzen und trotzdem alles miteinander zu verrechnen und zu verbinden. +
+In einigen Klassen nutze ich die getter und einmal den setter der ArrayList. Da dies allerdings nur Klassenintern geschieht stellt dies fuer mich keine Verletzung der Object Cathlisthenics dar, +
+fuehrt aber zu mehreren Punkten in einer Zeile. Ansonsten habe ich versucht mich an alle Regeln zu halten, auch wenn z.b. die Single Responsibility und Abstraktionsebene von Methoden dadurch das ich eben teilweise zwischendurch +
+die Ausgabe Funktionen aufrufe und auch ab und an mal eine new line mache villeicht hier leicht verletzt sind. +
+Ich denke aber auch dies ist vertretbar, da man den Aufruf der Ausgabe und dessen was man berechnet ja irgendwie zur selben gesamt-Responsibility zählen kann. +
+Das einzige womit ich persönlich noch unzufrieden war, ist das ich nicht direkt die berechnung der Betragsliste im Event package machen konnte, da ich diese quasi personenbezogen definiert habe +
+,aber die Person ja nicht außerhalb der PersonenListe getten und somit nicht schon den Aufruf der berechnung der Beträge die sie bekommt und zahlen muss nicht komplett in der EventListe machen konnte. +
+Das Auslagern der Indizes scheint mir auch noch nicht ganz optimal gelöst, aber innerhalb der Regeln und arbeitsweise und daher akzeptabel. +
